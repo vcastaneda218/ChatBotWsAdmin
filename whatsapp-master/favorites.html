@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Whatsapp</title>
+	
+   <!-- Jquery -->
+  <script  src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script  src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <!-- Moment -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+
+
+	<script  src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+	<script  src="https://cdn.datatables.net/2.0.4/js/dataTables.jqueryui.js"></script>
+	<script  src="https://cdn.datatables.net/scroller/2.4.1/js/dataTables.scroller.js"></script>
+	<script  src="https://cdn.datatables.net/scroller/2.4.1/js/scroller.jqueryui.js"></script>
+
+  <style>
+
+    #nav-contactos
+    {
+      background-color: #f0f2f5;
+    }
+
+   
+    .dt-search input,
+    .dt-search textarea {
+     padding: 0px 8px 4px 8px;
+     border: none;
+     border-bottom: 1px solid lightgray;
+     border-radius: 0px;
+     margin-top: 2px;
+     margin-bottom: 10px;
+     width: 50%;
+     max-width: 50%;
+     box-sizing: border-box;
+     color: #2C3E50;
+     font-size: 16px;
+     letter-spacing: 1px;
+    }
+
+    .dt-paging button
+    {
+      margin-top: 20px;
+      width: 90px;
+      background: rgba(0,74,143,0.8);
+      color: white;
+      border: 0 none;
+      border-radius: 0px;
+      cursor: pointer;
+      padding: 10px 5px;
+      margin: 10px 5px
+    }
+
+  </style>
+  
+  <script>
+    $(document).ready(function() { 
+      
+      $.ajax({
+      url: 'http://localhost:5032/api/WhatsAppAdmin/GetFavoritos',
+      type: 'GET',
+        success: function(res) {
+        
+        var innerHTML= "";
+        $.each(res, function(index, value) {
+
+        innerHTML= innerHTML +
+        `<tr>
+            <td>`+ value.numero +`</td>
+            <td>`+ value.nombre +`</td>
+          </tr>`;
+
+        });
+
+        $("#example tbody").html(innerHTML);
+
+
+            $('#example').DataTable({
+            "dom": '<"toolbar">frtip',
+            info: true,
+            searching: true,
+            lengthChange: false,
+                "language": {
+                    "zeroRecords": "No se encontró ninguna contacto",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "select": {
+                        "rows": " filas seleccionadas"
+                    },
+                    "loadingRecords": "Un momento, cargando contactos ...",
+                    "processing": "Procesando contactos...",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_  de contactos",
+                    "lengthMenu": "Mostrando _MENU_ contactos",
+                }
+            });
+
+        }
+      });
+    });
+  </script> 
+
+</head>
+<body>
+
+  <div class="row">
+    <div class="col-md-12">
+
+
+      <nav id="nav-contactos" class="navbar navbar-expand-lg navbar">
+        <div class="container-fluid">
+          <a href="#"><img src="images/chat1.jpg" alt="Profile Photo" class="img-fluid rounded-circle mr-2" style="height:50px;" id="pic"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                &nbsp;
+                <b>Admin</b>
+              </li>
+              &nbsp;
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./index.html">Mensajes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./contacts.html">Contactos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Favoritos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./tags.html">Etiquetas</a>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+    </br>
+      <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Numero</th>
+                <th>Nombre</th> 
+            </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+    </table>
+</div>
+</div>
+</body>
+</html>
