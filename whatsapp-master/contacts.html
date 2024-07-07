@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<title>Whatsapp</title>
-	
+
    <!-- Jquery -->
   <script  src="https://code.jquery.com/jquery-3.7.1.js"></script>
 	<script  src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -28,6 +28,7 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="contacts.js"></script>
 
   <style>
 
@@ -67,117 +68,6 @@
     }
 
   </style>
-  
-  <script>
-    $(document).ready(function() { 
-      
-      $.ajax({
-      url: 'http://localhost:5032/api/WhatsAppAdmin/GetContactos',
-      type: 'GET',
-        success: function(res) {
-        
-        var innerHTML= "";
-        $.each(res, function(index, value) {
-
-        innerHTML= innerHTML +
-        `<tr>
-            <td>`+ value.numero +`</td>
-            <td>`+ value.nombre +`</td>
-            <td>`+ value.favorito +`</td>
-            <td>`+ value.etiqueta +`</td>
-            <td>`+ moment(value.fechaCreacion, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY hh:mm") +`</td>
-            <td><button class="btn btn-default"><i class="fas fa-pencil-alt"></i></button></td>
-            <td><button class="btn btn-default"><i class="fas fa-trash"></i></button></td>
-          </tr>`;
-
-        });
-
-        $("#example tbody").html(innerHTML);
-
-
-            $('#example').DataTable({
-            "dom": '<"toolbar">frtip',
-            info: true,
-            searching: true,
-            lengthChange: false,
-                "language": {
-                    "zeroRecords": "No se encontró ninguna contacto",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "select": {
-                        "rows": " filas seleccionadas"
-                    },
-                    "loadingRecords": "Un momento, cargando contactos ...",
-                    "processing": "Procesando contactos...",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_  de contactos",
-                    "lengthMenu": "Mostrando _MENU_ contactos",
-                }
-            });
-            $("div.toolbar").append('<button data-bs-toggle="modal" data-bs-target="#ModalAgregarContacto"  style="background-color:#004a8f;color:white;display:block;margin-left:85%" class="btn btn-default" >+ Agregar</button>');
-           
-        }
-      });
-    });
-
-    function agregarcontacto()
-    {
-
-        var numero = $("#NuevoContactoTelefonoTxt").val();
-        var nombre = $("#NuevoContactoNombreTxt").val();
-
-        var date = new Date();
-        var newContact = {};
-        newContact.ContactoId = 0;
-        newContact.Numero = numero;
-        newContact.Nombre = nombre;
-        newContact.Favorito = false;
-        newContact.Etiqueta ="Nuevo";
-        newContact.FechaCreacion = date;
-        newContact.Activo = true;
-     
-        var data = JSON.stringify(newContact);
-        console.log(newContact);
-        
-          $.ajax({
-              type: "POST",
-              url: "http://localhost:5032/api/Contactos",
-              data: data,
-              contentType: "application/json; charset=utf-8",
-              dataType: "json",
-              success: function (response) {
-                Swal.fire({
-                  title: "Info!",
-                  text: "El contacto se ha guardado correctamente!",
-                  icon: "success"
-                }).then((result) => {
-
-                  location.href="./contacts.html";
-                  
-                });
-            },
-            failure: function (response) {
-                Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: response
-              });
-            },
-            error: function (response) {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: response
-              });
-            }
-        });
-
-    }
-  </script> 
-
 </head>
 <body>
 
@@ -200,17 +90,17 @@
               </li>
               &nbsp;
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="./index.html">Mensajes</a>
+                <a class="nav-link" aria-current="page" href="./admin.html">Mensajes</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#">Contactos</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="./favorites.html">Favoritos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="./tags.html">Etiquetas</a>
-              </li>
+              </li> -->
             </ul>
 
           </div>
@@ -238,38 +128,122 @@
 
   <!-- Modal Agregar Contacto -->
   <div class="modal fade" id="ModalAgregarContacto">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
       
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Agregar nuevo contacto</h4>
-          <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
         </div>
         
         <!-- Modal body -->
         <div class="modal-body">
-
-			<div class="form-group">
-				<label for="NuevoContactoTelefonoTxt"><b>Telefono:</b></label>
-				<input type="text" class="form-control" id="NuevoContactoTelefonoTxt">
-			</div>
-
-			<div class="form-group">
-				<label for="NuevoContactoNombreTxt"><b>Nombre:</b></label>
-				<input type="text" class="form-control" id="NuevoContactoNombreTxt">
-			</div>
+          
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="NuevoContactoTelefonoTxt"><b>Telefono:</b></label>
+                    <input type="text" class="form-control" id="NuevoContactoTelefonoTxt">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="NuevoContactoNombreTxt"><b>Nombre:</b></label>
+                    <input type="text" class="form-control" id="NuevoContactoNombreTxt">
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="NuevoContactoFavoritoDdl"><b>Favorito:</b></label>
+                  <select class="form-select"  id="NuevoContactoFavoritoDdl">
+                    <option value="0">No</option>
+                    <option value="1">Si</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="NuevoContactoEtiquetaTxt"><b>Etiqueta:</b></label>
+                  <input type="text" class="form-control" id="NuevoContactoEtiquetaTxt">
+                </div>
+              </div>
+          </div>
+          </div>
 
         </div>
         
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button onclick="agregarcontacto()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button> 
+          <button onclick="canceladdcontact()"  type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button onclick="addcontact()" type="button" class="btn btn-primary" >Guardar</button> 
         </div>
         
       </div>
     </div>
   </div>
+
+    <!-- Modal Editar Contacto -->
+    <div class="modal fade" id="ModalEditarContacto">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Editar contacto</h4>
+          </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body">
+            
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="EditContactoTelefonoTxt"><b>Telefono:</b></label>
+                      <input disabled type="text" class="form-control" id="EditContactoTelefonoTxt">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="EditContactoNombreTxt"><b>Nombre:</b></label>
+                      <input type="text" class="form-control" id="EditContactoNombreTxt">
+                    </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="EditContactoFavoritoDdl"><b>Favorito:</b></label>
+                    <select class="form-select"  id="EditContactoFavoritoDdl">
+                      <option selected>Seleccione</option>
+                      <option value="0">No</option>
+                      <option value="1">Si</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="EditContactoEtiquetaTxt"><b>Etiqueta:</b></label>
+                    <input type="text" class="form-control" id="EditContactoEtiquetaTxt">
+                  </div>
+                </div>
+            </div>
+            </div>
+  
+          </div>
+          
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button onclick="canceleditcontact()"  type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button onclick="editcontact()" type="button" class="btn btn-primary">Guardar</button> 
+          </div>
+          
+        </div>
+      </div>
+    </div>
 
 </body>
 </html>

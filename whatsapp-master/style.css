@@ -138,3 +138,11 @@
 	left: 0;
 	z-index: 99;
 }
+
+.carousel-control-next {
+    background-color: transparent;
+}
+
+.carousel-control-prev {
+    background-color: transparent;
+}
