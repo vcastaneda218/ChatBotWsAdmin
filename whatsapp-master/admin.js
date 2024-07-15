@@ -256,13 +256,75 @@ function imagefuploaderShowFiles()
     $("#imagefuploader-a").hide();
     $("#imagefuploader-icon").hide();
     $("#imagefuploader-lbl").hide();
+
+    $("#documentfuploader-a").hide();
+    $("#documentfuploader-icon").hide();
+    $("#documentfuploader-lbl").hide();
+
     $("#inputsendmessage").hide();
     $("#buttonsendmessage").hide();
-    $("#input-area").append('<button style="margin-left:400px;margin-bottom:20px;" onclick="CancelSendImg()" class="btn btn-danger" >Cancelar</button><button style="margin-left:20px;margin-bottom:20px;" onclick="SendImg('+ numero +')" class="btn btn-primary" >Enviar</button>');
+    $("#input-area").append('<button style="margin-left:400px;margin-bottom:20px;" onclick="CancelSendImg()" class="btn btn-danger" >Cancelar</button><button style="margin-left:20px;margin-bottom:20px;" onclick="SendDoc('+ numero +')" class="btn btn-primary" >Enviar</button>');
 
-  
 }
 
+
+function documentfuploaderShowFiles()
+{
+    var numero = $("#name").val();
+    clearInterval(ActualizarMensajesAuto);
+
+    var fileInput = document.getElementById('documentfuploader');   
+    var files = fileInput.files;
+
+    if( files.length <= 0)
+     {
+        return;
+     }
+     
+     var innerHTML=
+    `<div style="width:500px;height:500px;margin-left:150px;" id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">`;
+
+    for (var i = 0; i < files.length; i++) {
+    	innerHTML= innerHTML +
+        `<div class="carousel-item active">
+        <img src="./images/docicon.png" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+            <h5>`+ files[0].name +`</h5>
+            <p></p>
+        </div>
+        </div>`;
+   
+    }
+
+    innerHTML= innerHTML +
+    `</div>
+    <button style="border:none;backgroud-color:transparent;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden"></span>
+    </button>
+    <button style="border:none;backgroud-color:transparent;" class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden"></span>
+    </button>
+    </div>`;
+
+    $("#messages").html(innerHTML);
+    
+    $("#emojibtn").hide();
+    $("#imagefuploader-a").hide();
+    $("#imagefuploader-icon").hide();
+    $("#imagefuploader-lbl").hide();
+
+    $("#documentfuploader-a").hide();
+    $("#documentfuploader-icon").hide();
+    $("#documentfuploader-lbl").hide();
+
+    $("#inputsendmessage").hide();
+    $("#buttonsendmessage").hide();
+    $("#input-area").append('<button style="margin-left:400px;margin-bottom:20px;" onclick="CancelSendDoc()" class="btn btn-danger" >Cancelar</button><button style="margin-left:20px;margin-bottom:20px;" onclick="SendDoc('+ numero +')" class="btn btn-primary" >Enviar</button>');
+
+}
 
 
 function sendMessage()
@@ -633,23 +695,49 @@ success: function(res) {
 
         }
     }
+    else if(value.tipo == 'image')
+    {
+        if(value.respuesta == '' || value.respuesta  == 'undefined' || value.respuesta  == null )
+        {
+            innerHTML= innerHTML +
+            `<div class="card" style="width: 18rem;margin-top:15px;align-self:self-end">
+            <img class="image-section" style="width:18rem;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+            src="./WEBSITES/chatboot.cabal.com.co/Images/Received/`+ value.mensaje1 +`"/>
+            </div>`;
+        }
+        else
+        {
+            innerHTML= innerHTML +
+            `<div class="card" style="width: 18rem;margin-top:15px;">
+            <img class="image-section" style="width:18rem;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+            src="./WEBSITES/chatboot.cabal.com.co/Images/Sended/`+ value.respuesta +`"/>
+             </div>`;
+        }
+
+    }
     else
     {
         if(value.respuesta == '' || value.respuesta  == 'undefined' || value.respuesta  == null )
         {
             innerHTML= innerHTML +
-            `<br/><img class="image-section" style="width: 300px;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
-            src="https://navicol.blob.core.windows.net/wsimages/`+ value.mensaje1 +`"/>`;
+            `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+                <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Received/`+ value.mensaje1 +`" download >
+                <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                src="./images/documents.png"/>
+                </a>
+                </div>`;
         }
         else
         {
             innerHTML= innerHTML +
-            `<br/><img class="image-section" style="width: 300px;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
-            src="./WEBSITES/chatboot.cabal.com.co/Images/`+ value.respuesta +`"/>`;
+            `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+                <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Sended/`+ value.respuesta +`" download >
+                <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                src="./images/documents.png"/>
+                </a>
+                </div>`;
         }
-
     }
-
 
     });
    
@@ -991,22 +1079,49 @@ if ($("#messages").html() !== '')
 
                     }
                 }
-                else
+                else if(value.tipo == 'text')
                 {
                     if(value.respuesta == '' || value.respuesta  == 'undefined' || value.respuesta  == null )
                         {
                             innerHTML= innerHTML +
-                            `<br/><img class="image-section" style="width: 300px;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
-                            src="https://navicol.blob.core.windows.net/wsimages/`+ value.mensaje1 +`"/>`;
+                            `<div class="card" style="width: 18rem;margin-top:15px;align-self:self-end">
+                            <img class="image-section" style="width: 18rem;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                            src="./WEBSITES/chatboot.cabal.com.co/Images/Received/`+ value.mensaje1 +`"/>
+                            </div>`;
                         }
                         else
                         {
                             innerHTML= innerHTML +
-                            `<br/><img class="image-section" style="width: 300px;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
-                            src="./WEBSITES/chatboot.cabal.com.co/Images/`+ value.respuesta +`"/>`;
+                            `<div class="card" style="width: 18rem;margin-top:15px;">
+                            <img class="image-section" style="width: 18rem;;height:300px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                            src="./WEBSITES/chatboot.cabal.com.co/Images/Sended/`+ value.respuesta +`"/>
+                            </div>`;
                         }
                 
 
+                }
+                else
+                {
+                    if(value.respuesta == '' || value.respuesta  == 'undefined' || value.respuesta  == null )
+                    {
+                        innerHTML= innerHTML +
+                        `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+                            <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Received/`+ value.mensaje1 +`" download >
+                            <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                            src="./images/documents.png"/>
+                            </a>
+                            </div>`;
+                    }
+                    else
+                    {
+                        innerHTML= innerHTML +
+                        `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+                            <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Sended/`+ value.respuesta +`" download >
+                            <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
+                            src="./images/documents.png"/>
+                            </a>
+                            </div>`;
+                    }
                 }
 
                 });
@@ -1077,22 +1192,25 @@ function SendImg(numero)
       });
    
     }
+    
 
     ActualizarMensajesAuto = setInterval(Actualizarmensajes, 3000);
     CountmessageByNumberList=1;
     var innerHTML = 
-    `<a id="imagefuploader-a" href="#">
-    <i id="emojibtn" class="far fa-smile text-muted px-3" style="font-size:1.5rem;"></i>
+    `<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-2" style="font-size:1.5rem;"></i></a>
+    <a id="documentfuploader-a">
+        <input id="documentfuploader" accept=".doc, .docx, .pdf" onchange="documentfuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="documentfuploader-lbl" for="documentfuploader"><i id="documentfuploader-icon" class="fas fa-paperclip text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
     </a>
-	<a>
-    <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
-    <i id="imagefuploader-icon" class="fas fa-paperclip text-muted px-3" style="font-size:1.5rem;">
-    <label id="imagefuploader-lbl" for="imagefuploader">Foto</label>
-    </i>
+    <a id="imagefuploader-a">
+        <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="imagefuploader-lbl" for="imagefuploader"><i id="imagefuploader-icon" class="far fa-images text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
     </a>
-	<input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
-	<i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()">
-    </i>`;
+    <input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
+    <i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()"></i>
+    `;
     $("#input-area").html(innerHTML);
     $("#inputsendmessage").on("keydown", function(event) {
         if(event.which == 13)
@@ -1102,29 +1220,135 @@ function SendImg(numero)
    
 }
 
-function CancelSendImg()
+
+
+function SendDoc(numero)
 {
+
+    var fileInput = document.getElementById('documentfuploader');   
+    var files = fileInput.files;
+
+    if( files.length <= 0)
+     {
+        return;
+
+     } 
+
+     for (var i = 0; i < files.length; i++) {
+ 
+        var formData = new FormData();            
+        formData.append("file", files[i]);
+        formData.append("number", numero);
+
+        $.ajax({
+            type: "POST",
+            url: "https://www.mctechnologies.online/api/WhatsAppAdmin/EnviarMensajeDoc",
+            data: formData,
+            processData: false,  
+            contentType: false,
+            success: function (response) {
+
+
+          },
+          failure: function (response) {
+              Swal.fire({
+              icon: "Error",
+              title: "Oops...",
+              text: response
+            });
+          },
+          error: function (response) {
+            Swal.fire({
+              icon: "Error",
+              title: "Oops...",
+              text: response
+            });
+          }
+      });
+   
+    }
+    
+
     ActualizarMensajesAuto = setInterval(Actualizarmensajes, 3000);
     CountmessageByNumberList=1;
     var innerHTML = 
-    `<a id="imagefuploader-a" href="#">
-    <i id="emojibtn" class="far fa-smile text-muted px-3" style="font-size:1.5rem;"></i>
+    `<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-2" style="font-size:1.5rem;"></i></a>
+    <a id="documentfuploader-a">
+        <input id="documentfuploader" accept=".doc, .docx, .pdf" onchange="documentfuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="documentfuploader-lbl" for="documentfuploader"><i id="documentfuploader-icon" class="fas fa-paperclip text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
     </a>
-	<a>
-    <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
-    <i id="imagefuploader-icon" class="fas fa-paperclip text-muted px-3" style="font-size:1.5rem;">
-    <label id="imagefuploader-lbl" for="imagefuploader">Foto</label>
-    </i>
+    <a id="imagefuploader-a">
+        <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="imagefuploader-lbl" for="imagefuploader"><i id="imagefuploader-icon" class="far fa-images text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
     </a>
-	<input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
-	<i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()">
-    </i>`;
+    <input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
+    <i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()"></i>
+    `;
+    $("#input-area").html(innerHTML);
     $("#inputsendmessage").on("keydown", function(event) {
         if(event.which == 13)
             sendMessage();
     });
     Actualizarmensajes();
+   
+}
 
+
+function CancelSendImg()
+{
+    ActualizarMensajesAuto = setInterval(Actualizarmensajes, 3000);
+    CountmessageByNumberList=1;
+    var innerHTML = 
+    `<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-2" style="font-size:1.5rem;"></i></a>
+    <a id="documentfuploader-a">
+        <input id="documentfuploader" accept=".doc, .docx, .pdf" onchange="documentfuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="documentfuploader-lbl" for="documentfuploader"><i id="documentfuploader-icon" class="fas fa-paperclip text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
+    </a>
+    <a id="imagefuploader-a">
+        <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="imagefuploader-lbl" for="imagefuploader"><i id="imagefuploader-icon" class="far fa-images text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
+    </a>
+    <input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
+    <i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()"></i>
+    `;
+    $("#input-area").html(innerHTML);
+    $("#inputsendmessage").on("keydown", function(event) {
+        if(event.which == 13)
+            sendMessage();
+    });
+    Actualizarmensajes();
+}
+
+
+function CancelSendDoc()
+{
+    ActualizarMensajesAuto = setInterval(Actualizarmensajes, 3000);
+    CountmessageByNumberList=1;
+    var innerHTML = 
+    `<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-2" style="font-size:1.5rem;"></i></a>
+    <a id="documentfuploader-a">
+        <input id="documentfuploader" accept=".doc, .docx, .pdf" onchange="documentfuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="documentfuploader-lbl" for="documentfuploader"><i id="documentfuploader-icon" class="fas fa-paperclip text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
+    </a>
+    <a id="imagefuploader-a">
+        <input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+        <label id="imagefuploader-lbl" for="imagefuploader"><i id="imagefuploader-icon" class="far fa-images text-muted px-2" style="font-size:1.5rem;"></i></label>
+        </input>
+    </a>
+    <input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
+    <i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()"></i>
+    `;
+    $("#input-area").html(innerHTML);
+    $("#inputsendmessage").on("keydown", function(event) {
+        if(event.which == 13)
+            sendMessage();
+    });
+    Actualizarmensajes();
 }
 
 function logout()

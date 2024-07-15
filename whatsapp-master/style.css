@@ -104,7 +104,8 @@
 #messages {
 	flex: 1!important;
 	background:#f0f2f5;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #profile-settings {
@@ -146,3 +147,4 @@
 .carousel-control-prev {
     background-color: transparent;
 }
+

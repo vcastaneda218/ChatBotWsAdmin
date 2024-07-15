@@ -104,11 +104,16 @@
 
 				<!-- Input -->
 				<div class="d-none justify-self-end align-items-center flex-row" id="input-area">
-					<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-3" style="font-size:1.5rem;"></i></a>
+					<a id="emojibtn" href="#"><i class="far fa-smile text-muted px-2" style="font-size:1.5rem;"></i></a>
+					<a id="documentfuploader-a">
+						<input id="documentfuploader" accept=".doc, .docx, .pdf" onchange="documentfuploaderShowFiles()"  multiple="" type="file" style="display:none" >
+						<label id="documentfuploader-lbl" for="documentfuploader"><i id="documentfuploader-icon" class="fas fa-paperclip text-muted px-2" style="font-size:1.5rem;"></i></label>
+						</input>
+					</a>
 					<a id="imagefuploader-a">
 						<input id="imagefuploader" accept="image/*" onchange="imagefuploaderShowFiles()"  multiple="" type="file" style="display:none" >
-						<i id="imagefuploader-icon" class="fas fa-paperclip text-muted px-3" style="font-size:1.5rem;">
-						<label id="imagefuploader-lbl" for="imagefuploader">Foto</label></i>
+						<label id="imagefuploader-lbl" for="imagefuploader"><i id="imagefuploader-icon" class="far fa-images text-muted px-2" style="font-size:1.5rem;"></i></label>
+						</input>
 					</a>
 					<input type="text" name="message"  id="inputsendmessage"  class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
 					<i id="buttonsendmessage" class="fas fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="sendMessage()"></i>
