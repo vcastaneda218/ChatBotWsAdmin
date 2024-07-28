@@ -263,7 +263,7 @@ function imagefuploaderShowFiles()
 
     $("#inputsendmessage").hide();
     $("#buttonsendmessage").hide();
-    $("#input-area").append('<button style="margin-left:400px;margin-bottom:20px;" onclick="CancelSendImg()" class="btn btn-danger" >Cancelar</button><button style="margin-left:20px;margin-bottom:20px;" onclick="SendDoc('+ numero +')" class="btn btn-primary" >Enviar</button>');
+    $("#input-area").append('<button style="margin-left:400px;margin-bottom:20px;" onclick="CancelSendImg()" class="btn btn-danger" >Cancelar</button><button style="margin-left:20px;margin-bottom:20px;" onclick="SendImg('+ numero +')" class="btn btn-primary" >Enviar</button>');
 
 }
 
@@ -724,13 +724,15 @@ success: function(res) {
                 <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Received/`+ value.mensaje1 +`" download >
                 <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
                 src="./images/documents.png"/>
+                 <div class="centeredmarginbottom">`+ value.mensaje1+`</div>
+                 <div class="centered">Download</div>
                 </a>
                 </div>`;
         }
         else
         {
             innerHTML= innerHTML +
-            `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+            `<div class="card" style="width: 9rem;margin-top:15px;">
                 <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Sended/`+ value.respuesta +`" download >
                 <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
                 src="./images/documents.png"/>
@@ -1079,7 +1081,7 @@ if ($("#messages").html() !== '')
 
                     }
                 }
-                else if(value.tipo == 'text')
+                else if(value.tipo == 'image')
                 {
                     if(value.respuesta == '' || value.respuesta  == 'undefined' || value.respuesta  == null )
                         {
@@ -1109,13 +1111,15 @@ if ($("#messages").html() !== '')
                             <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Received/`+ value.mensaje1 +`" download >
                             <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
                             src="./images/documents.png"/>
+                               <div class="centeredmarginbottom">`+ value.mensaje1+`</div>
+                                <div class="centered">Download</div>
                             </a>
                             </div>`;
                     }
                     else
                     {
                         innerHTML= innerHTML +
-                        `<div class="card" style="width: 9rem;margin-top:15px;align-self:self-end">
+                        `<div class="card" style="width: 9rem;margin-top:15px;">
                             <a href="./WEBSITES/chatboot.cabal.com.co/Documents/Sended/`+ value.respuesta +`" download >
                             <img class="image-section" style="width: 9rem;;height:100px;" data-bind="sanitizedAttr: { src: imageUri }, visible: imageUri()" 
                             src="./images/documents.png"/>
